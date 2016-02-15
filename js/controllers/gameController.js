@@ -13,16 +13,14 @@ function GameController($http, $state, $stateParams) {
 
 	self.correctAnswer;
 
-	self.correctCounter;
-	self.incorrectCounter;
+	self.correctCounter = 0;
+	self.incorrectCounter = 0;;
 
 
 	self.playerCorrect = false;
 	self.playerIncorrect = false;
 
 	self.question;
-
-
 
 	var queryParams = [
 	{"name": "United States", "country_code": "US",    "perpage": "8"},
@@ -90,14 +88,12 @@ function GameController($http, $state, $stateParams) {
 	}
 
 	self.checkAnswer = function(ans) {
-
-
 		var answerCity = ans.city;
 		if (answerCity == self.correctAnswer.city) {
-			console.log('correct');
+			self.correctCounter++;
 			self.playerCorrect = true;
 		} else {
-			console.log('incorrect');
+			self.incorrectCounter++;
 			self.playerIncorrect = true;
 		}
 	}
@@ -219,6 +215,9 @@ function GameController($http, $state, $stateParams) {
 	    		var question = 'Which city is furthest south?'
 	    	}
 
+
+
+
 	    	getChoicesLat(question, subType);
 	      break;
 	    // case 'lng':
@@ -229,14 +228,21 @@ function GameController($http, $state, $stateParams) {
 	    	var subType = subTypes[Math.floor(Math.random()*subTypes.length)];
 
 	    	if (subType == 'max') {
-	    		var question = "Which city's timezone is furthest ahead of the UK?"
+	    		var question = "In which city does the sun rise first?"
 	    	} else {
-	    		var question = "Which city's timezone is furthest behind the UK?"
+	    		var question = "In which city does the sun set last?"
 	    	}
 
 	    	getChoicesTimezone(question, subType);
 	    	break;
 		}
+	}
+
+	var resetGame = function() {
+		self.correctCounter = 0;
+		self.incorrectCounter = 0;
+		self.playerCorrect = false;
+		self.playerIncorrect = false;
 	}
 
 	self.generateQuestion();
