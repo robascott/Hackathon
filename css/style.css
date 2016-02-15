@@ -7,7 +7,7 @@ main {
 	margin: 0 auto;
 }
 
-.questioncard{
+.question-card{
 	display: inline-block;
 	color: red;
 	border-style: solid;
@@ -20,8 +20,25 @@ main {
 	vertical-align: middle;
 }
 
+.question-card:hover {
+	background-color: #ecf0f1;
+	cursor: pointer;
+}
+
 .correct{
-	color: green;
+	background-color: green;
+}
+
+.correct:hover {
+	background-color: green;
+}
+
+.incorrect {
+	background-color: black;
+}
+
+.incorrect:hover {
+	background-color: black;
 }
 
 h3{

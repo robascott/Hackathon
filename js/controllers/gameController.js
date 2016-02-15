@@ -21,6 +21,22 @@ function GameController($http, $state, $stateParams) {
 	self.playerCorrect = false;
 	self.playerIncorrect = false;
 
+	self.answered = false;
+
+	self.wrongSelection;
+
+	self.cardClasses = {}
+
+	self.cardClass = function(choice) {
+		if (choice.city == self.correctAnswer.city && self.answered==true) {
+			return 'correct';
+		} else if (choice.city == self.wrongSelection) {
+			return 'incorrect';
+		} else {
+			return '';
+		}
+	}
+
 	self.question;
 
 	var queryParams = [
@@ -44,7 +60,6 @@ function GameController($http, $state, $stateParams) {
 
 
 	var getCities = function() {
-		console.log('calling getCities()');
 		var i = 0;
 
 		function myLoop () {           //  create a loop function
@@ -52,14 +67,11 @@ function GameController($http, $state, $stateParams) {
 		      $http
 		        .get('http://api.nytimes.com/svc/semantic/v2/geocodes/query.json?country_code=' + queryParams[i].country_code + '&perpage=' + queryParams[i].perpage + '&feature_class=P&api-key=d83845203553d6a2b10eda0563e0e4ec:8:74415254')
 		        .then((function(j) { return function(response) {
-		        	console.log('got response');
-		        	console.log(response);
 		        	var cities = response.data.results;
 		        	cities.forEach(function(city) {
 	        			var cityInfo = {city: city.name, country: city.country_name, population: city.population, lat: city.latitude, lng: city.longitude, timezone: city.gmt_offset};
 	        		  self.allCities.push(cityInfo);
 		        	});
-		        	console.log('callback j: ' + j);
 		        	if (j==queryParams.length-1) {
 		        		generateQuestion();
 		        	}
@@ -89,13 +101,17 @@ function GameController($http, $state, $stateParams) {
 	}
 
 	self.checkAnswer = function(ans) {
-		var answerCity = ans.city;
-		if (answerCity == self.correctAnswer.city) {
-			self.correctCounter++;
-			self.playerCorrect = true;
-		} else {
-			self.incorrectCounter++;
-			self.playerIncorrect = true;
+		if (!self.answered) {
+			self.answered = true;
+			var answerCity = ans.city;
+			if (answerCity == self.correctAnswer.city) {
+				self.correctCounter++;
+				self.playerCorrect = true;
+			} else {
+				self.wrongSelection = ans.city;
+				self.incorrectCounter++;
+				self.playerIncorrect = true;
+			}
 		}
 	}
 
@@ -189,6 +205,8 @@ function GameController($http, $state, $stateParams) {
 
 		self.playerIncorrect = false;
 		self.playerCorrect = false;
+		self.answered = false;
+		self.wrongSelection = null;
 		var questionTypes = ['lat','pop','timezone'];
 		var chosenType = questionTypes[Math.floor(Math.random()*questionTypes.length)];
 
@@ -227,17 +245,14 @@ function GameController($http, $state, $stateParams) {
 
 	    	getChoicesLat(question, subType);
 	      break;
-	    // case 'lng':
-	    // 	getChoicesLng();
-	    // 	break;
 	    case 'timezone':
 	    	var subTypes = ['max','min'];
 	    	var subType = subTypes[Math.floor(Math.random()*subTypes.length)];
 
 	    	if (subType == 'max') {
-	    		var question = "In which city does the sun rise first?"
+	    		var question = "Which city celebrates New Year first?"
 	    	} else {
-	    		var question = "In which city does the sun set last?"
+	    		var question = "Which city celebrates New Year last?"
 	    	}
 
 	    	getChoicesTimezone(question, subType);
@@ -250,11 +265,11 @@ function GameController($http, $state, $stateParams) {
 		self.incorrectCounter = 0;
 		self.playerCorrect = false;
 		self.playerIncorrect = false;
+		self.answered = false;
+		self.wrongSelection = null;
 		self.generateQuestion();
 	}
 
 	self.generateQuestion();
-
-	console.log('running');
 
 }
