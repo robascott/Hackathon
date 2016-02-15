@@ -22,11 +22,6 @@ function GameController($http, $state, $stateParams) {
 
 	self.question;
 
-	self.qType;
-
-	self.popQ = false;
-	self.latQ = false;
-	self.timezoneQ = false;
 
 
 	var queryParams = [
@@ -95,17 +90,6 @@ function GameController($http, $state, $stateParams) {
 	}
 
 	self.checkAnswer = function(ans) {
-		switch(self.qType) {
-		  case 'pop':
-		  	self.popQ = true;
-		  	break;
-		  case 'lat':
-		  	self.latQ = true;
-		  	break;
-		  case 'timezone':
-		  	self.timezoneQ = true;
-		  	break;
-		}
 
 
 		var answerCity = ans.city;
@@ -151,8 +135,9 @@ function GameController($http, $state, $stateParams) {
 
 	var getChoicesPop = function(question,type) {
 		var shuffledArray = shuffle(self.allCities);
-		self.choices = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
-		var populations = [self.choices[0].population, self.choices[1].population, self.choices[2].population];
+		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
+		var populations = [cities[0].population, cities[1].population, cities[2].population];
+		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].population}, {city: shuffledArray[1].city, value: shuffledArray[1].population}, {city: shuffledArray[2].city, value: shuffledArray[2].population}];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(populations)];
@@ -166,8 +151,9 @@ function GameController($http, $state, $stateParams) {
 
 	var getChoicesLat = function(question,type) {
 		var shuffledArray = shuffle(self.allCities);
-		self.choices = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
-		var latitudes = [self.choices[0].lat, self.choices[1].lat, self.choices[2].lat];
+		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
+		var latitudes = [cities[0].lat, cities[1].lat, cities[2].lat];
+		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].lat}, {city: shuffledArray[1].city, value: shuffledArray[1].lat}, {city: shuffledArray[2].city, value: shuffledArray[2].lat}];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(latitudes)];
@@ -181,8 +167,9 @@ function GameController($http, $state, $stateParams) {
 
 	var getChoicesTimezone = function(question,type) {
 		var shuffledArray = shuffle(self.allCities);
-		self.choices = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
-		var timezones = [self.choices[0].timezone, self.choices[1].timezone, self.choices[2].timezone];
+		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
+		var timezones = [cities[0].timezone, cities[1].timezone, cities[2].timezone];
+		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].timezone}, {city: shuffledArray[1].city, value: shuffledArray[1].timezone}, {city: shuffledArray[2].city, value: shuffledArray[2].timezone}];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(timezones)];
@@ -196,16 +183,11 @@ function GameController($http, $state, $stateParams) {
 
 
 	self.generateQuestion = function() {
-		self.popQ = false;
-		self.latQ = false;
-		self.timezoneQ = false;
-
 
 		self.playerIncorrect = false;
 		self.playerCorrect = false;
 		var questionTypes = ['lat','pop','timezone'];
 		var chosenType = questionTypes[Math.floor(Math.random()*questionTypes.length)];
-		self.qType = chosenType;
 
 		switch(chosenType) {
 		  case 'pop':

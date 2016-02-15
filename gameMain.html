@@ -11,9 +11,7 @@
 
 		<li>
 			<h3 ng-click="game.checkAnswer(choice)">{{choice.city}}</h3>
-			<p ng-show='game.popQ'>{{choice.population}}</p>
-			<p ng-show='game.latQ'>{{choice.lat}}</p>
-			<p ng-show='game.timezoneQ'>{{choice.timezone}}</p>
+			<p ng-show='game.playerCorrect || game.playerIncorrect'>{{choice.value}}</p>
 		</li>
 
 
