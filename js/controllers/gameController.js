@@ -245,11 +245,12 @@ function GameController($http, $state, $stateParams) {
 		}
 	}
 
-	var resetGame = function() {
+	self.resetGame = function() {
 		self.correctCounter = 0;
 		self.incorrectCounter = 0;
 		self.playerCorrect = false;
 		self.playerIncorrect = false;
+		self.generateQuestion();
 	}
 
 	self.generateQuestion();
