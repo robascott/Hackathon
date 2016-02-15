@@ -1,5 +1,8 @@
+
+
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #ecf0f1 !important;
 }
 
 main {
@@ -9,19 +12,23 @@ main {
 
 .question-card{
 	display: inline-block;
-	color: red;
-	border-style: solid;
-	border-radius: 20px;
+	color: white;
+	background-color: #3498db;
+	border-radius: 10px;
 	padding: 10px;
 	margin: 10px;
 	width: 220px;
 	height: 150px;
 	text-align: center;
 	vertical-align: middle;
+	-webkit-box-shadow: 0px 3px 13px -3px #888888;
+	-moz-box-shadow: 0px 3px 13px -3px #888888;
+	box-shadow: 0px 3px 13px -3px #888888;
+	border: 2px solid transparent;
 }
 
 .question-card:hover {
-	background-color: #ecf0f1;
+	background-color: #2980b9;
 	cursor: pointer;
 }
 
@@ -34,11 +41,11 @@ main {
 }
 
 .incorrect {
-	background-color: black;
+	background-color: #e74c3c;
 }
 
 .incorrect:hover {
-	background-color: black;
+	background-color: #e74c3c;
 }
 
 h3{
@@ -49,7 +56,30 @@ h3{
 	text-align: center;
 }
 
-#button{
-	display: inline-block;
+#next-question-div{
+	height: 50px;
+	line-height: 50px;
 	text-align: center;
+	margin: 0 auto;
+}
+
+#next-question-text {
+	display: inline;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+#next-question-img {
+	position: relative;
+	top: 45%;
+	transform: translateY(-50%);
+	margin-left: 5px;
+}
+
+#map {
+	height: 250px; 
+	width: 550px;
+	margin: 0 auto;
+	border: 2px solid #ddd;
+	border-radius: 3px;
 }

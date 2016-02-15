@@ -1,27 +1,25 @@
-<section class='score'>
-	<p>Correctly answered: {{game.correctCounter}}</h2>
-	<p>Incorrectly answered: {{game.incorrectCounter}}</h2>
-</section>
-
-
 <section class='cards'>
 
 	<h2 class="maincontainer">{{game.question}}</h2>
 
 	<div class="maincontainer row">
 		<div ng-click="game.checkAnswer(choice)" class="question-card" ng-class="game.cardClass(choice)" ng-repeat='choice in game.choices'>
-			<h3>{{choice.city}}</h3>
-			<p ng-show='game.playerCorrect || game.playerIncorrect'>{{choice.value}}</p>
+			<h3>{{choice.city}},<br>{{choice.country}}</h3>
+			<p ng-show="game.answered && game.qType=='pop'">Population: {{choice.population}}</p>
+			<p ng-show="game.answered && game.qType=='lat'">Latitude: {{choice.lat}}</p>
+			<p ng-show="game.answered && game.qType=='timezone'">GMT {{choice.timezone}}</p>
 		</div>
 	</div>
 	
 	<h3 ng-show='game.playerCorrect'>Correct</h3>
-	<h3 ng-show='game.playerIncorrect'>Incorrect</h3>
 
-	<h3 ng-show='game.playerCorrect || game.playerIncorrect'>Correct answer: {{game.correctAnswer.city}}</h3>
+	<h3 ng-show='game.playerIncorrect'>Correct answer: {{game.correctAnswer.city}}</h3>
 	
-	<div id="button">
-	<input ng-show='game.playerCorrect || game.playerIncorrect' ng-click='game.generateQuestion()' type='image' src="images/svg/arrows.svg" width="30px" value="Next question">
+	<div id="next-question-div">
+		<p id='next-question-text' ng-show='game.answered' ng-click='game.generateQuestion()'>Next question</p>
+		<input id='next-question-img' ng-show='game.answered' ng-click='game.generateQuestion()' type='image' src="images/svg/arrows.svg" width="30px" value="Next question">
 	</div>
+
+	<div ng-show='game.answered' id="map" class='map'></div>
 
 </section>

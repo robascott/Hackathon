@@ -4,6 +4,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-resource.min.js"></script>
+	<script src="http://maps.googleapis.com/maps/api/js"></script>
 	<!-- models and controllers go here -->
 	<script src="js/app.js"></script>
 	<script src="js/controllers/gameController.js"></script>
@@ -25,7 +26,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand">GeoQuiz</a>
+	      <a ui-sref='index' class="navbar-brand">GeoQuiz</a>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -33,6 +34,11 @@
 	      <ul class="nav navbar-nav">
 	        <li><a ng-click='game.resetGame()' href='#'>Reset</a></li>
 	      </ul>
+
+	    	<ul class="nav navbar-nav navbar-right">
+          <p style='display:inline'>Correct: {{game.correctCounter}}</p>
+          <p style='display:inline'>Incorrect: {{game.incorrectCounter}}</p>
+	    	</ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>

@@ -17,6 +17,8 @@ function GameController($http, $state, $stateParams) {
 	self.correctCounter = 0;
 	self.incorrectCounter = 0;;
 
+	self.qType;
+
 
 	self.playerCorrect = false;
 	self.playerIncorrect = false;
@@ -25,7 +27,7 @@ function GameController($http, $state, $stateParams) {
 
 	self.wrongSelection;
 
-	self.cardClasses = {}
+	var mapInitialised = false;
 
 	self.cardClass = function(choice) {
 		if (choice.city == self.correctAnswer.city && self.answered==true) {
@@ -101,8 +103,16 @@ function GameController($http, $state, $stateParams) {
 	}
 
 	self.checkAnswer = function(ans) {
+
 		if (!self.answered) {
 			self.answered = true;
+			
+			if (!mapInitialised) initMap();
+			clearMarkers();
+			self.choices.forEach(function(city) {
+				addPlaceMarker(city.city, city.lat, city.lng);
+			});
+
 			var answerCity = ans.city;
 			if (answerCity == self.correctAnswer.city) {
 				self.correctCounter++;
@@ -150,7 +160,7 @@ function GameController($http, $state, $stateParams) {
 		var shuffledArray = shuffle(self.allCities);
 		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
 		var populations = [cities[0].population, cities[1].population, cities[2].population];
-		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].population}, {city: shuffledArray[1].city, value: shuffledArray[1].population}, {city: shuffledArray[2].city, value: shuffledArray[2].population}];
+		self.choices = [shuffledArray[0],shuffledArray[1],shuffledArray[2]];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(populations)];
@@ -168,7 +178,7 @@ function GameController($http, $state, $stateParams) {
 		var shuffledArray = shuffle(self.allCities);
 		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
 		var latitudes = [cities[0].lat, cities[1].lat, cities[2].lat];
-		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].lat}, {city: shuffledArray[1].city, value: shuffledArray[1].lat}, {city: shuffledArray[2].city, value: shuffledArray[2].lat}];
+		self.choices = [shuffledArray[0],shuffledArray[1],shuffledArray[2]];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(latitudes)];
@@ -186,7 +196,7 @@ function GameController($http, $state, $stateParams) {
 		var shuffledArray = shuffle(self.allCities);
 		var cities = [shuffledArray[0], shuffledArray[1], shuffledArray[2]];
 		var timezones = [cities[0].timezone, cities[1].timezone, cities[2].timezone];
-		self.choices = [{city: shuffledArray[0].city, value: shuffledArray[0].timezone}, {city: shuffledArray[1].city, value: shuffledArray[1].timezone}, {city: shuffledArray[2].city, value: shuffledArray[2].timezone}];
+		self.choices = [shuffledArray[0],shuffledArray[1],shuffledArray[2]];
 
 		if (type=='max') {
 			self.correctAnswer = self.choices[getMax(timezones)];
@@ -200,6 +210,54 @@ function GameController($http, $state, $stateParams) {
 	}
 
 
+	var initMap = function() {
+		mapInitialised = true;
+		map = new google.maps.Map(document.getElementById('map'), {
+		  center: {lat: 20, lng: 0},
+		  zoom: 1,
+		  mapTypeId: google.maps.MapTypeId.ROADMAP,
+		  disableDefaultUI: true,
+		  styles: [{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f0df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"visibility":"on"},{"color":"#d4e9b6"}]},{"featureType":"landscape.natural.landcover","elementType":"geometry","stylers":[{"visibility":"off"},{"hue":"#ff0000"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"},{"hue":"#ff0000"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c3e2aa"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.text","stylers":[{"visibility":"simplified"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"road.local","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#c9bfd1"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#B3CADD"}]}]
+		});
+	}
+
+	var markersArray = [];
+
+	function addPlaceMarker(name,lat,lng) {
+	  var latlng = new google.maps.LatLng(lat,lng);
+
+	  var contentString = "<p>" + name + "</p>";
+
+	  var infowindow = new google.maps.InfoWindow({
+	      content: contentString
+	  });
+	  
+	  var marker = new google.maps.Marker(
+	  {
+	    position: latlng,
+	    map: map,
+	    title: name
+	  });
+	  markersArray.push(marker);
+
+	  marker.addListener('mouseover', function() {
+	    infowindow.open(map, marker);
+	  });
+
+	  marker.addListener('mouseout', function() {
+	    infowindow.close();
+	  });
+	}
+
+
+	function clearMarkers() {
+	  for (var i = 0; i < markersArray.length; i++ ) {
+	    markersArray[i].setMap(null);
+	  }
+	  markersArray.length = 0;
+	}
+
+
 
 	self.generateQuestion = function() {
 
@@ -209,6 +267,7 @@ function GameController($http, $state, $stateParams) {
 		self.wrongSelection = null;
 		var questionTypes = ['lat','pop','timezone'];
 		var chosenType = questionTypes[Math.floor(Math.random()*questionTypes.length)];
+		self.qType = chosenType;
 
 		switch(chosenType) {
 		  case 'pop':
@@ -222,9 +281,9 @@ function GameController($http, $state, $stateParams) {
 	      var subType = subTypes[Math.floor(Math.random()*subTypes.length)];
 
 	      if (subType == 'max') {
-	      	var question = 'Which city has a largest population?'
+	      	var question = 'Which city has the largest population?'
 	      } else {
-	      	var question = 'Which city has a smallest population?'
+	      	var question = 'Which city has the smallest population?'
 	      }
 
 	      getChoicesPop(question, subType);
@@ -267,6 +326,7 @@ function GameController($http, $state, $stateParams) {
 		self.playerIncorrect = false;
 		self.answered = false;
 		self.wrongSelection = null;
+		mapInitialised = false;
 		self.generateQuestion();
 	}
 
