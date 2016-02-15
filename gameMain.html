@@ -6,24 +6,21 @@
 
 <section class='cards'>
 
-	<h2>{{game.question}}</h2>
+	<h2 class="maincontainer">{{game.question}}</h2>
 
-	<h3 ng-show='game.playerCorrect'>Correct</h3>
-	<h3 ng-show='game.playerIncorrect'>Incorrect</h3>
-
-	<h3 ng-show='game.playerCorrect || game.playerIncorrect'>Correct answer: {{game.correctAnswer.city}}</h3>
-
-	<ul ng-repeat='choice in game.choices'>
-
-		<li>
-			<h3 ng-click="game.checkAnswer(choice)">{{choice.city}}</h3>
+	<div class="maincontainer row">
+		<div class="questioncard" ng-repeat='choice in game.choices'>
+			<h3 class={{$index}} ng-click="game.checkAnswer(choice)">{{choice.city}}</h3>
 			<p ng-show='game.playerCorrect || game.playerIncorrect'>{{choice.value}}</p>
-		</li>
+		</div>
+	</div>
+		<h3 ng-show='game.playerCorrect'>Correct</h3>
+		<h3 ng-show='game.playerIncorrect'>Incorrect</h3>
 
-
-	</ul>
-
-	<input ng-show='game.playerCorrect || game.playerIncorrect' ng-click='game.generateQuestion()' type='button' value="Next question">
-
+		<h3 ng-show='game.playerCorrect || game.playerIncorrect'>Correct answer: {{game.correctAnswer.city}}</h3>
+	
+	<div id="button">
+	<input ng-show='game.playerCorrect || game.playerIncorrect' ng-click='game.generateQuestion()' type='image' src="images/svg/arrows.svg" width="30px" value="Next question">
+	</div>
 
 </section>
