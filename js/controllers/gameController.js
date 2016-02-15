@@ -107,11 +107,13 @@ function GameController($http, $state, $stateParams) {
 		if (!self.answered) {
 			self.answered = true;
 			
-			if (!mapInitialised) initMap();
-			clearMarkers();
-			self.choices.forEach(function(city) {
-				addPlaceMarker(city.city, city.lat, city.lng);
-			});
+			if (!mapInitialised && (self.qType=='lat' || self.qType=='timezone')) initMap();
+			if (self.qType=='lat' || self.qType=='timezone') {
+				clearMarkers();
+				self.choices.forEach(function(city) {
+					addPlaceMarker(city.city, city.lat, city.lng);
+				});
+			}
 
 			var answerCity = ans.city;
 			if (answerCity == self.correctAnswer.city) {

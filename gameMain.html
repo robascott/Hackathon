@@ -20,6 +20,6 @@
 		<input id='next-question-img' ng-show='game.answered' ng-click='game.generateQuestion()' type='image' src="images/svg/arrows.svg" width="30px" value="Next question">
 	</div>
 
-	<div ng-show='game.answered' id="map" class='map'></div>
+	<div ng-show="game.answered && (game.qType=='timezone' || game.qType=='lat')" id="map" class='map'></div>
 
 </section>
