@@ -6,3 +6,33 @@ main {
 	max-width: 80%;
 	margin: 0 auto;
 }
+
+.questioncard{
+	display: inline-block;
+	color: red;
+	border-style: solid;
+	border-radius: 20px;
+	padding: 10px;
+	margin: 10px;
+	width: 220px;
+	height: 150px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.correct{
+	color: green;
+}
+
+h3{
+	text-align: center;
+}
+
+.maincontainer{
+	text-align: center;
+}
+
+#button{
+	display: inline-block;
+	text-align: center;
+}
